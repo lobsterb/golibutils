@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
+	"time"
 )
 
 /**
@@ -60,7 +61,7 @@ func newCore(filePath string, level zapcore.Level, maxSize int, maxBackups int, 
 		StacktraceKey:  "stacktrace",
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    zapcore.LowercaseLevelEncoder,  // 小写编码器
-		EncodeTime:     zapcore.ISO8601TimeEncoder,     // ISO8601 UTC 时间格式
+		EncodeTime:     customTimeEncoder,              // 用户自定义格式化时间
 		EncodeDuration: zapcore.SecondsDurationEncoder, //
 		EncodeCaller:   zapcore.FullCallerEncoder,      // 全路径编码器
 		EncodeName:     zapcore.FullNameEncoder,
@@ -70,6 +71,10 @@ func newCore(filePath string, level zapcore.Level, maxSize int, maxBackups int, 
 		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(&hook)), // 打印到控制台和文件
 		atomicLevel, // 日志级别
 	)
+}
+
+func customTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+	enc.AppendString(t.Format("2006-01-02 15:04:05"))
 }
 
 //
@@ -216,6 +221,3 @@ func newCore(filePath string, level zapcore.Level, maxSize int, maxBackups int, 
 //	return zapcore.NewCore(getEncoder(zapConfig), writer, level)
 //}
 //
-//func customTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-//	enc.AppendString(t.Format("2006-01-02 15:04:05"))
-//}
