@@ -1,6 +1,9 @@
 package utils
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 // CheckFilePathExist 检测文件路径是否存在
 func CheckFilePathExist(filePath string) bool {
@@ -11,4 +14,19 @@ func CheckFilePathExist(filePath string) bool {
 		}
 	}
 	return true
+}
+
+// NormativePath 规范路径
+func NormativePath(path string) string {
+	return strings.Replace(path, "\\", "/", -1)
+}
+
+// NormativeDirPath 规范目录路径
+func NormativeDirPath(path string) string {
+	dirPath := NormativePath(path)
+	// 判断最后一个字符是否是/
+	if dirPath[len(dirPath)-1:] != "/" {
+		dirPath = dirPath + "/"
+	}
+	return dirPath
 }
