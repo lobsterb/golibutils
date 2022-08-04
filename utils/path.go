@@ -5,6 +5,15 @@ import (
 	"strings"
 )
 
+// GetWorkDir 获取工作目录
+func GetWorkDir() (string, error) {
+	workDir, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return workDir, nil
+}
+
 // CheckFilePathExist 检测文件路径是否存在
 func CheckFilePathExist(filePath string) bool {
 	_, err := os.Stat(filePath)
