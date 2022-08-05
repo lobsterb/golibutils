@@ -37,6 +37,12 @@ func CreateDir(fullPath string) (bool, error) {
 	}
 }
 
+// RemoveFile 删除文件
+func RemoveFile(path string) error {
+	_err := os.Remove(path)
+	return _err
+}
+
 // RemoveDir 删除文件夹
 func RemoveDir(path string) error {
 	_err := os.RemoveAll(path)
