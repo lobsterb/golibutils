@@ -24,6 +24,7 @@ func CheckPathExist(filePath string) bool {
 	return true
 }
 
+// CreateDir 创建目录
 func CreateDir(fullPath string) (bool, error) {
 	parentPath, _ := filepath.Split(fullPath)
 	if ok := CheckPathExist(parentPath); ok {
@@ -34,6 +35,12 @@ func CreateDir(fullPath string) (bool, error) {
 		}
 		return true, nil
 	}
+}
+
+// RemoveDir 删除文件夹
+func RemoveDir(path string) error {
+	_err := os.RemoveAll(path)
+	return _err
 }
 
 // SaveFile 保存文件
