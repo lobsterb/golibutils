@@ -2,6 +2,7 @@ package utils
 
 import (
 	"os"
+	"path/filepath"
 )
 
 type ErrDataIsNil struct {
@@ -10,6 +11,29 @@ type ErrDataIsNil struct {
 
 func (e ErrDataIsNil) Error() string {
 	return "data is nil"
+}
+
+// CheckPathExist 检测文件路径是否存在
+func CheckPathExist(filePath string) bool {
+	_, err := os.Stat(filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+	}
+	return true
+}
+
+func CreateDir(fullPath string) (bool, error) {
+	parentPath, _ := filepath.Split(fullPath)
+	if ok := CheckPathExist(parentPath); ok {
+		return true, nil
+	} else {
+		if err := os.MkdirAll(parentPath, os.ModePerm); err != nil {
+			return false, err
+		}
+		return true, nil
+	}
 }
 
 // SaveFile 保存文件
