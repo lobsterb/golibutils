@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -47,6 +48,11 @@ func RemoveFile(path string) error {
 func RemoveDir(path string) error {
 	_err := os.RemoveAll(path)
 	return _err
+}
+
+// ReadAllFile 一次性读取文件
+func ReadAllFile(path string) ([]byte, error) {
+	return ioutil.ReadFile(path)
 }
 
 // SaveFile 保存文件
