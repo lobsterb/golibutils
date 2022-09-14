@@ -20,7 +20,8 @@ import (
  */
 func NewLogger(filePath string, level zapcore.Level, maxSize int, maxBackups int, maxAge int, compress bool, serviceName string) *zap.Logger {
 	core := newCore(filePath, level, maxSize, maxBackups, maxAge, compress)
-	return zap.New(core, zap.AddCaller(), zap.Development(), zap.Fields(zap.String("serviceName", serviceName)))
+	// return zap.New(core, zap.AddCaller(), zap.Development(), zap.Fields(zap.String("serviceName", serviceName)))
+	return zap.New(core, zap.AddCaller(), zap.Development())
 }
 
 /**
@@ -60,21 +61,22 @@ func newCore(filePath string, level zapcore.Level, maxSize int, maxBackups int, 
 		MessageKey:     "msg",
 		StacktraceKey:  "stacktrace",
 		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.LowercaseLevelEncoder,  // 小写编码器
-		EncodeTime:     customTimeEncoder,              // 用户自定义格式化时间
-		EncodeDuration: zapcore.SecondsDurationEncoder, //
-		EncodeCaller:   zapcore.FullCallerEncoder,      // 全路径编码器
-		EncodeName:     zapcore.FullNameEncoder,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder, // 小写编码器
+		EncodeTime:     customTimeEncoder,             // 用户自定义格式化时间
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeCaller:   zapcore.ShortCallerEncoder, // 全路径编码器
+		// EncodeName:     zapcore.FullNameEncoder,
 	}
 	return zapcore.NewCore(
-		zapcore.NewJSONEncoder(encoderConfig),                                           // 编码器配置
+		// zapcore.NewJSONEncoder(encoderConfig),                                           // 编码器配置
+		zapcore.NewConsoleEncoder(encoderConfig),
 		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(&hook)), // 打印到控制台和文件
 		atomicLevel, // 日志级别
 	)
 }
 
 func customTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
+	enc.AppendString(t.Format("2006-01-02 15:04:05"))
 }
 
 //
