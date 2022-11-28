@@ -15,26 +15,28 @@ func GetWorkDir() (string, error) {
 }
 
 // ReplaceSlashPath 规范路径
-func ReplaceSlashPath(path string, isBackslash bool) string {
-	old := "\\"
-	new := "/"
-	if isBackslash == false {
-		old = "/"
-		new = "\\"
+func ReplaceSlashPath(path string, useBackslash bool) string {
+	slash := "\\"
+	newSlash := "/"
+	if useBackslash == true {
+		slash = "/"
+		newSlash = "\\"
 	}
-	return strings.Replace(path, old, new, -1)
+
+	return strings.Replace(path, slash, newSlash, -1)
 }
 
-// ReplaceDirSlash 规范目录路径
-func ReplaceDirSlash(path string, isBackslash bool) string {
-	dirPath := ReplaceSlashPath(path, isBackslash)
+// NormalizationDirSlash 规范目录路径
+func NormalizationDirSlash(path string, useBackslash bool) string {
+	dirPath := ReplaceSlashPath(path, useBackslash)
 	slash := "/"
-	if isBackslash == false {
+	if useBackslash == true {
 		slash = "\\"
 	}
 	// 判断最后一个字符是否是/
 	if dirPath[len(dirPath)-1:] != slash {
 		dirPath = dirPath + slash
 	}
+
 	return dirPath
 }
