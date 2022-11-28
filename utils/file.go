@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -82,4 +85,16 @@ func SaveFile(filePath string, data []byte) (bool, error) {
 // SaveJsonFile 保存成json文件
 func SaveJsonFile(filePath string, data interface{}) (bool, error) {
 	return SaveFile(filePath, ToJsonBytes(data))
+}
+
+// GetFileMd5 计算文件md5
+func GetFileMd5(filePath string) (string, error) {
+	file, err := os.Open(filePath)
+	defer file.Close()
+	if err != nil {
+		return "", err
+	}
+	hash := md5.New()
+	_, _ = io.Copy(hash, file)
+	return hex.EncodeToString(hash.Sum(nil)), nil
 }
