@@ -90,11 +90,17 @@ func SaveJsonFile(filePath string, data interface{}) (bool, error) {
 // GetFileMd5 计算文件md5
 func GetFileMd5(filePath string) (string, error) {
 	file, err := os.Open(filePath)
-	defer file.Close()
 	if err != nil {
 		return "", err
 	}
+	defer file.Close()
+
 	hash := md5.New()
-	_, _ = io.Copy(hash, file)
-	return hex.EncodeToString(hash.Sum(nil)), nil
+	_, err = io.Copy(hash, file)
+	if err != nil {
+		return "", err
+	}
+
+	md5Hash := hex.EncodeToString(hash.Sum(nil))
+	return md5Hash, nil
 }
