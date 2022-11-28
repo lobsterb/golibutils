@@ -38,5 +38,9 @@ func NormalizationDirSlash(path string, useBackslash bool) string {
 		dirPath = dirPath + slash
 	}
 
+	// 判断是否有多个/获取\\
+	doubleSlash := slash + slash
+	dirPath = strings.Replace(dirPath, doubleSlash, slash, -1)
+
 	return dirPath
 }
