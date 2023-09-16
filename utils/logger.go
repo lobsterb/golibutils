@@ -18,10 +18,10 @@ import (
  * compress 是否压缩
  * serviceName 服务名
  */
-func NewLogger(filePath string, level zapcore.Level, maxSize int, maxBackups int, maxAge int, compress bool, serviceName string) *zap.Logger {
+func NewLogger(filePath string, level zapcore.Level, maxSize int, maxBackups int, maxAge int, compress bool, serviceName string, skip int) *zap.Logger {
 	core := newCore(filePath, level, maxSize, maxBackups, maxAge, compress)
 	// return zap.New(core, zap.AddCaller(), zap.Development(), zap.Fields(zap.String("serviceName", serviceName)))
-	return zap.New(core, zap.AddCaller(), zap.Development())
+	return zap.New(core, zap.AddCaller(), zap.AddCallerSkip(skip), zap.Development())
 }
 
 /**
